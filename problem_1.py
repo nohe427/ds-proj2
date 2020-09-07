@@ -1,16 +1,92 @@
+class Node(object):
+    def __init__(self, key:int=None, value:int=None):
+        self.key = key
+        self.value = value
+        self.prev = None
+        self.next = None
+
 class LRU_Cache(object):
 
-    def __init__(self, capacity):
+    def __init__(self, capacity:int):
         # Initialize class variables
-        pass
+        self.itemsD = {}
+        self.size = 0
+        self.capacity = capacity
+        self.head = None
+        self.tail = None
 
-    def get(self, key):
-        # Retrieve item from provided key. Return -1 if nonexistent. 
-        pass
+    def get(self, key: int) -> int:
+        # Retrieve item from provided key. Return -1 if nonexistent.
+        if self.size == 0:
+            return -1
+        if key not in self.itemsD:
+            return -1
+        node = self.itemsD[key]
+        self._remove_node(node)
+        self._make_node_head(node)
+        return node.value
 
-    def set(self, key, value):
-        # Set the value if the key is not present in the cache. If the cache is at capacity remove the oldest item. 
-        pass
+    def set(self, key: int, value: int) -> None:
+        # Set the value if the key is not present in the cache.
+        node = Node(key, value)
+        if self.head == None:
+            self.size += 1
+            self.head = node
+            self.tail = node
+            self.itemsD[key] = node
+            return
+        if self._already_exists(node):
+            # No need to move the head if its the same
+            if self.head.key == node.key:
+                self.head.value = node.value
+                return
+            else:
+                self._remove_node(node)
+                self._make_node_head(node)
+                return
+        else:
+            self._make_node_head(node)
+
+        # If the cache is at capacity remove the oldest item. 
+        if self._at_capacity():
+            self._remove_oldest()
+        else:
+            self.size += 1
+
+    def _make_node_head(self, node:Node) -> None:
+        node.next = self.head
+        self.head = node
+        node.next.prev = node
+        self.itemsD[node.key] = node
+
+    def _already_exists(self, node: Node) -> bool:
+        return node.key in self.itemsD
+
+    def _remove_node(self, node:Node) -> None:
+        remove_me = self.itemsD[node.key]
+        if remove_me.next is None:
+            self.tail = remove_me.prev
+            self.tail.next = None
+            return
+        if remove_me.prev is not None:
+            remove_me.prev.next = remove_me.next
+            remove_me.next = remove_me.prev
+            return
+
+    def _at_capacity(self) -> bool:
+        return self.size == self.capacity
+
+    def _remove_oldest(self):
+        del self.itemsD[self.tail.key]
+        new_tail = self.tail.prev
+        self.tail = new_tail
+        self.tail.next = None
+
+    # Only use for debugging purposes
+    def __str__(self) -> str:
+        s = f"Head({self.head.value})\n"
+        s += f"Tail({self.tail.value})"
+        return s
 
 our_cache = LRU_Cache(5)
 
