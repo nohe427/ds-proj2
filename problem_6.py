@@ -41,13 +41,48 @@ class LinkedList:
 
         return size
 
-def union(llist_1, llist_2):
-    # Your Solution Here
-    pass
+def _add_all_to_ll(head, llist, seen_before):
+    node = head
+    while node:
+        if node.value not in seen_before:
+            llist.append(node.value)
+            seen_before.add(node.value)
+        node = node.next
 
+def _add_only_seen_to_ll(head, llist, seen_before):
+    node = head
+    while node:
+        if node.value in seen_before:
+            llist.append(node.value)
+            seen_before.remove(node.value)
+        node = node.next
+
+# Union runtime: O(n)
+# The reason this is N is because I only run through each list once and
+# append to the end of the list once.  We know working with sets runs in
+# O(1) and we know that we drop the constants from the runtime final calculation
+def union(llist_1, llist_2):
+    seen_before = set()
+    LLfinal = LinkedList()
+    _add_all_to_ll(llist_1.head, LLfinal, seen_before)
+    
+    _add_all_to_ll(llist_2.head, LLfinal, seen_before)
+    return LLfinal
+    
+# Intersection runtime: O(n)
+# The reason this is N is because I only run through each list once and
+# append to the end of the list once.  We know working with sets runs in
+# O(1) and we know that we drop the constants from the runtime final calculation
 def intersection(llist_1, llist_2):
-    # Your Solution Here
-    pass
+    seen_before = set()
+    node = llist_1.head
+    LLFinal = LinkedList()
+    while node:
+        seen_before.add(node.value)
+        node = node.next
+
+    _add_only_seen_to_ll(llist_2.head, LLFinal, seen_before)
+    return LLFinal
 
 
 # Test case 1
@@ -83,3 +118,5 @@ for i in element_2:
 
 print (union(linked_list_3,linked_list_4))
 print (intersection(linked_list_3,linked_list_4))
+
+# See comments above union for runtime and comments above intersection for runtime.
