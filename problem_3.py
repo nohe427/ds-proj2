@@ -83,7 +83,6 @@ def huffman_decoding(data,tree):
 if __name__ == "__main__":
     codes = {}
 
-    a_great_sentence = "AAAAAAABBBCCCCCCCDDEEEEEE"
     a_great_sentence = "The bird is the word"
 
     print ("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
