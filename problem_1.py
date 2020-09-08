@@ -11,9 +11,15 @@ class LRU_Cache(object):
         # Initialize class variables
         self.itemsD = {}
         self.size = 0
-        self.capacity = capacity
+        self.capacity = self._set_capacity(capacity)
         self.head = None
         self.tail = None
+
+    # Setting min capacity to 1. Otherwise the cache doesn't work at all.
+    def _set_capacity(self, value: int) -> int:
+        if value < 1:
+            return 1
+        return value
 
     def get(self, key: int) -> int:
         # Retrieve item from provided key. Return -1 if nonexistent.
@@ -27,6 +33,8 @@ class LRU_Cache(object):
         return node.value
 
     def set(self, key: int, value: int) -> None:
+        if key is None: # We can but probably should not use a None type key
+            return
         # Set the value if the key is not present in the cache.
         node = Node(key, value)
         if self.head == None:
@@ -64,9 +72,13 @@ class LRU_Cache(object):
 
     def _remove_node(self, node:Node) -> None:
         remove_me = self.itemsD[node.key]
+        # We are at the tail
         if remove_me.next is None:
             self.tail = remove_me.prev
-            self.tail.next = None
+            if self.tail:
+                self.tail.next = None
+            else: # This is because the tail and the head are the same.
+                self.tail = remove_me
             return
         if remove_me.prev is not None:
             remove_me.prev.next = remove_me.next
@@ -88,6 +100,8 @@ class LRU_Cache(object):
         s += f"Tail({self.tail.value})"
         return s
 
+# Test 1 given to us
+print("\nSample Test provided to us")
 our_cache = LRU_Cache(5)
 
 our_cache.set(1, 1);
@@ -104,3 +118,37 @@ our_cache.set(5, 5)
 our_cache.set(6, 6)
 
 our_cache.get(3)      # returns -1 because the cache reached it's capacity and 3 was the least recently used entry
+
+# Test 2 - setting the same element a bunch to ensure we are not evicting good elements
+print("\nStarting Test 2 - setting the same element a bunch to ensure we are not evicting good elements")
+our_cache = LRU_Cache(5)
+our_cache.set(2, 2)
+our_cache.set(1, 1)
+our_cache.set(1, 1)
+our_cache.set(1, 1)
+our_cache.set(1, 1)
+our_cache.set(1, 1)
+our_cache.get(1) # returns 1
+print(our_cache.get(2)) 
+# returns 2
+
+# Test 3 - negative capacity
+print("\nStarting Test 3 - setting a negative capacity in the cache")
+our_cache = LRU_Cache(-1)
+our_cache.set(3,3)
+print(our_cache.get(3))
+#returns 3
+print(our_cache.get(2))
+# returns -1
+our_cache.set(2,2)
+print(our_cache.get(3))
+# returns -1
+print(our_cache.get(2))
+# returns 2
+
+# Test 4 - setting a None type object in the cache
+print("\nStarting Test 4 - setting a None type object in the cache")
+our_cache = LRU_Cache(5)
+our_cache.set(None, 5)
+print(our_cache.get(None))
+#returns -1
