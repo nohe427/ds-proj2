@@ -34,18 +34,42 @@ def huffman_encoding(data: str):
             new_node = Node(item[0], item[1])
             heapq.heappush(h, (item[1], new_node))
         return h
+    def _build_tree(h):
+        while(len(h) > 1):
+            elem_left = heapq.heappop(h)
+            elem_right = heapq.heappop(h)
+            new_node = Node(frequency=(elem_left[1].frequency + elem_right[1].frequency))
+            new_node.left = elem_left[1]
+            new_node.right = elem_right[1]
+            heapq.heappush(h, (new_node.frequency, new_node))
+        return h[0][1]
+    def _generate_char_map(node, map, curr_str):
+        if node:
+            _generate_char_map(node.left, map, curr_str+"0")
+            if node.char:
+                map[node.char] = curr_str
+            _generate_char_map(node.right, map, curr_str+"1")
     char_count = _enumerate_count_of_characters(data)
     sorted_chars = _sort_chars_to_heap(char_count)
-    print(sorted_chars)
-    return None, None
+    h = _build_tree(sorted_chars)
+    char_map = {}
+    _generate_char_map(h, char_map, "")
+    for key, value in char_map.items():
+        data = data.replace(key, value)
+    return data,h
 
 def huffman_decoding(data,tree):
-    pass
+    decoded_str = ""
+
+    
+
+    return decoded_str
 
 if __name__ == "__main__":
     codes = {}
 
-    a_great_sentence = "The bird is the word"
+    a_great_sentence = "AAAAAAABBBCCCCCCCDDEEEEEE"
+    # a_great_sentence = "The bird is the word"
 
     print ("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
     print ("The content of the data is: {}\n".format(a_great_sentence))
