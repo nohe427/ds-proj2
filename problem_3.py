@@ -27,7 +27,7 @@ def huffman_encoding(data: str):
                 chars[char] = 1
         return chars
     def _sort_chars_to_heap(data: dict) -> list:
-        ## See https://knowledge.udacity.com/questions/227455
+        ## See https://knowledge.udacity.com/questions/227455 for permission for heapq usage
         sorted_list = sorted(data.items(), key = lambda x: x[1])
         h = []
         for item in sorted_list:
@@ -61,7 +61,22 @@ def huffman_encoding(data: str):
 def huffman_decoding(data,tree):
     decoded_str = ""
 
+    base_root = tree
+    for char in data:
+        if char == '1':
+            if base_root.right is not None:
+                base_root = base_root.right
+            else:
+                decoded_str += base_root.char
+                base_root = tree.right
+        if char == '0':
+            if base_root.left is not None:
+                base_root = base_root.left
+            else:
+                decoded_str += base_root.char
+                base_root = tree.left
     
+    decoded_str += base_root.char
 
     return decoded_str
 
@@ -69,7 +84,7 @@ if __name__ == "__main__":
     codes = {}
 
     a_great_sentence = "AAAAAAABBBCCCCCCCDDEEEEEE"
-    # a_great_sentence = "The bird is the word"
+    a_great_sentence = "The bird is the word"
 
     print ("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
     print ("The content of the data is: {}\n".format(a_great_sentence))
