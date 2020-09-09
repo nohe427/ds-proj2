@@ -19,17 +19,6 @@ class Group(object):
 
     def get_name(self):
         return self.name
-
-
-parent = Group("parent")
-child = Group("child")
-sub_child = Group("subchild")
-
-sub_child_user = "sub_child_user"
-sub_child.add_user(sub_child_user)
-
-child.add_group(sub_child)
-parent.add_group(child)
 ## END : GROUP DEFINITION FROM ASSIGNMENT
 
 ## START MY WORK
@@ -41,6 +30,8 @@ def is_user_in_group(user: str, group: Group) -> bool:
       user(str): user name/id
       group(class:Group): group to check user membership against
     """
+    if group is None or user is None or user is "":
+        return False
     if user in group.get_users():
         return True
     for sub_group in group.get_groups():
@@ -52,4 +43,30 @@ def is_user_in_group(user: str, group: Group) -> bool:
 ## END MY WORK
 
 # Testing validity of function
-# print(is_user_in_group("a", parent))
+# 
+print("\nTest 1 - Sample Test")
+parent = Group("parent")
+child = Group("child")
+sub_child = Group("subchild")
+
+sub_child_user = "sub_child_user"
+sub_child.add_user(sub_child_user)
+
+child.add_group(sub_child)
+parent.add_group(child)
+print(is_user_in_group("a", parent))
+#False
+print(is_user_in_group("sub_child_user", parent))
+#True
+
+print("\nTest 2 - None group")
+print(is_user_in_group("sub_child_user", None))
+#false
+
+print("\nTest 3 - None User")
+print(is_user_in_group(None, parent))
+#false
+
+print("\nTest 3 - Empty String User")
+print(is_user_in_group("", parent))
+#false
