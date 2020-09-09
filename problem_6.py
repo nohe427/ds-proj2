@@ -64,9 +64,10 @@ def _add_only_seen_to_ll(head, llist, seen_before):
 def union(llist_1, llist_2):
     seen_before = set()
     LLfinal = LinkedList()
-    _add_all_to_ll(llist_1.head, LLfinal, seen_before)
-    
-    _add_all_to_ll(llist_2.head, LLfinal, seen_before)
+    if llist_1 is not None:
+        _add_all_to_ll(llist_1.head, LLfinal, seen_before)
+    if llist_2 is not None:
+        _add_all_to_ll(llist_2.head, LLfinal, seen_before)
     return LLfinal
     
 # Intersection runtime: O(n)
@@ -74,6 +75,8 @@ def union(llist_1, llist_2):
 # append to the end of the list once.  We know working with sets runs in
 # O(1) and we know that we drop the constants from the runtime final calculation
 def intersection(llist_1, llist_2):
+    if llist_1 is None or llist_2 is None:
+        return LinkedList()
     seen_before = set()
     node = llist_1.head
     LLFinal = LinkedList()
@@ -120,3 +123,22 @@ print (union(linked_list_3,linked_list_4))
 print (intersection(linked_list_3,linked_list_4))
 
 # See comments above union for runtime and comments above intersection for runtime.
+
+print("\nTest Case 3 - None type linked list")
+llist1 = None
+llist2 = [1,2,4,5,6,7,8,9]
+sample_list = LinkedList()
+for i in llist2:
+    sample_list.append(i)
+print(intersection(llist1, sample_list))
+# Doesn't print anything - empty linked list returned
+
+print("\nTest Case 4 - None type linked list")
+llist1 = None
+llist2 = [1,2,4,5,6,7,8,9]
+sample_list = LinkedList()
+for i in llist2:
+    sample_list.append(i)
+print(union(llist1, sample_list))
+# 1 -> 2 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 ->
+
