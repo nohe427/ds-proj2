@@ -1,0 +1,2 @@
+# BlockChain Explanation
+I used a linked list for the blockchain as it allowed constant time insertion and lookup for the most recently added block. Runtime of functions (not including __str__ convience function) is O(1).  __str__ function has runtime of O(n)
