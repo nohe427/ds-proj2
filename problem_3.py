@@ -18,6 +18,8 @@ class Node(object):
         return f"Character {self.char}, Frequency {self.frequency}"
 
 def huffman_encoding(data: str):
+    if data is None or data is "":
+        return None, None
     def _enumerate_count_of_characters(data: str) -> dict:
         chars = {}
         for char in data:
@@ -59,6 +61,8 @@ def huffman_encoding(data: str):
     return data,h
 
 def huffman_decoding(data,tree):
+    if data is None or tree is None:
+        return None
     decoded_str = ""
 
     base_root = tree
@@ -81,6 +85,7 @@ def huffman_decoding(data,tree):
     return decoded_str
 
 if __name__ == "__main__":
+    print("\nTest 1 - Sample Test")
     codes = {}
 
     a_great_sentence = "The bird is the word"
@@ -97,3 +102,28 @@ if __name__ == "__main__":
 
     print ("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
     print ("The content of the encoded data is: {}\n".format(decoded_data))
+
+    print("\nTest 2 - None Type Input")
+    encoded_data, tree = huffman_encoding(None)
+    print(encoded_data)
+    # None
+    print(tree)
+    # None
+    decoded_data = huffman_decoding(encoded_data, tree)
+    print(decoded_data)
+    # None
+
+    print("\nTest 3 - Single Letter Input")
+    encoded_data, tree = huffman_encoding("f")
+    decoded_data = huffman_decoding(encoded_data, tree)
+    print(decoded_data)
+    # returns f
+
+    print("\nTest 4 - Empty String Input")
+    encoded_data, tree = huffman_encoding("")
+    print(encoded_data)
+    # None
+    print(tree)
+    # None
+    decoded_data = huffman_decoding(encoded_data, tree)
+    print(decoded_data)
