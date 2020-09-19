@@ -142,3 +142,10 @@ for i in llist2:
 print(union(llist1, sample_list))
 # 1 -> 2 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 ->
 
+print("\nTest Case 5 - Both linked lists are empty")
+sample_list1 = LinkedList()
+sample_list2 = LinkedList()
+print(union(sample_list1, sample_list2))
+# Doesn't print anything
+print(intersection(sample_list1, sample_list2))
+#Doesn't print anything
