@@ -49,7 +49,10 @@ def huffman_encoding(data: str):
         if node:
             _generate_char_map(node.left, map, curr_str+"0")
             if node.char:
-                map[node.char] = curr_str
+                if curr_str == "":
+                    map[node.char] = "0"
+                else:
+                    map[node.char] = curr_str
             _generate_char_map(node.right, map, curr_str+"1")
     char_count = _enumerate_count_of_characters(data)
     sorted_chars = _sort_chars_to_heap(char_count)
@@ -64,6 +67,11 @@ def huffman_decoding(data,tree):
     if data is None or tree is None:
         return None
     decoded_str = ""
+
+    if tree.left is None and tree.right is None:
+        for _ in range(tree.frequency):
+            decoded_str += tree.char
+        return decoded_str
 
     base_root = tree
     for char in data:
@@ -86,7 +94,6 @@ def huffman_decoding(data,tree):
 
 if __name__ == "__main__":
     print("\nTest 1 - Sample Test")
-    codes = {}
 
     a_great_sentence = "The bird is the word"
 
@@ -115,6 +122,8 @@ if __name__ == "__main__":
 
     print("\nTest 3 - Single Letter Input")
     encoded_data, tree = huffman_encoding("f")
+    print(encoded_data)
+    # returns 0
     decoded_data = huffman_decoding(encoded_data, tree)
     print(decoded_data)
     # returns f
@@ -127,3 +136,20 @@ if __name__ == "__main__":
     # None
     decoded_data = huffman_decoding(encoded_data, tree)
     print(decoded_data)
+
+    print("\nTest 5 - Repeated Single Character Input")
+
+    a_great_sentence = "bbbbbbbbbbb"
+
+    print ("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
+    print ("The content of the data is: {}\n".format(a_great_sentence))
+
+    encoded_data, tree = huffman_encoding(a_great_sentence)
+
+    # print ("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
+    print ("The content of the encoded data is: {}\n".format(encoded_data))
+
+    decoded_data = huffman_decoding(encoded_data, tree)
+
+    print ("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
+    print ("The content of the encoded data is: {}\n".format(decoded_data))
