@@ -1,2 +1,3 @@
 # BlockChain Explanation
 I used a linked list for the blockchain as it allowed constant time insertion and lookup for the most recently added block. Runtime of functions (not including __str__ convience function) is O(1).  __str__ function has runtime of O(n)
+The space complexity is O(n) as we are storing every input in a linked list and this list could grow with every transaction (add block command).
